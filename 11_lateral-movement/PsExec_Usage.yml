@@ -1,0 +1,25 @@
+title: PsExec Execution (Lateral Movement)
+id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+status: stable
+description: |
+  Detects execution of PsExec, a common tool for lateral movement.
+  Attackers frequently use it to deploy ransomware.
+references:
+  - https://attack.mitre.org/techniques/T1570/
+author: Detection Engineering Team
+date: 2026-06-29
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  selection:
+    EventID: 1
+    Image|endswith: '\PsExec.exe'
+    CommandLine|contains: '-accepteula'
+  condition: selection
+falsepositives:
+  - Legitimate use by system administrators.
+level: high
+tags:
+  - attack.t1570
+  - ransomware.medusa

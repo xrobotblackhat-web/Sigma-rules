@@ -1,0 +1,22 @@
+title: System Information Discovery
+id: 20260702161449Dis
+status: experimental
+description: Detects execution of systeminfo, whoami, hostname, ver.
+references:
+  - https://www.fbi.gov/file-repository/cyber-alerts/stopransomware-medusa-ransomware-031225.pdf/view
+author: Detection Engineering Team
+date: 2026-07-02
+logsource:
+  category: process
+  product: windows
+detection:
+    selection:
+      Image|endswith: ["\systeminfo.exe", "\whoami.exe", "\hostname.exe", "\ver.exe"]
+    condition: selection
+falsepositives:
+  - Legitimate admin tasks.
+level: low
+tags:
+  - attack.T1082
+  - ransomware.krybit
+  - ransomware.0apt

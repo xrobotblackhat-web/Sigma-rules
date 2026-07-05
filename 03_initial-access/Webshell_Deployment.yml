@@ -1,0 +1,23 @@
+title: Web Shell Deployment
+id: 20260702161449Ini
+status: experimental
+description: Detects suspicious file writes to web directories with script extensions.
+references:
+  - https://www.fbi.gov/file-repository/cyber-alerts/stopransomware-medusa-ransomware-031225.pdf/view
+author: Detection Engineering Team
+date: 2026-07-02
+logsource:
+  category: file
+  product: windows
+detection:
+    selection:
+      TargetFilename|contains: ["\inetpub\", "\wwwroot\", "\htdocs\"]
+      TargetFilename|endswith: [".aspx", ".php", ".jsp", ".asp"]
+    condition: selection
+falsepositives:
+  - Legitimate web application updates.
+level: critical
+tags:
+  - attack.T1505.003
+  - ransomware.krybit
+  - ransomware.0apt

@@ -1,0 +1,31 @@
+title: FortiBleed - Administrative Login from Unexpected Country
+id: d4e5f6a7-b8c9-0123-defg-456789012345
+status: experimental
+description: Detects successful administrative login to FortiGate from a country not in the organization's expected list. FortiBleed affected devices across 194 countries, making geo-location anomalies a key indicator.
+author: Detection Engineering Team
+date: 2026-06-27
+references:
+  - https://www.csa.gov.sg/alerts-and-advisories/advisories/ad-2026-007/
+  - https://www.csoonline.com/article/4186790/fortibleed-campaign-exposes-75000-fortinet-firewalls-worldwide.html
+tags:
+  - attack.initial_access
+  - attack.t1078
+  - attack.t1078.001
+  - campaign.fortibleed
+logsource:
+  category: firewall
+  product: fortigate
+detection:
+  selection:
+    event_type: "admin_login"
+    action: "success"
+  filter_expected:
+    source_country|in:
+      - "Morocco"
+      - "France"
+      # Add your organization's expected countries
+  condition: selection and not filter_expected
+falsepositives:
+  - Traveling employees
+  - Remote workers using VPNs that exit in other countries
+level: high

@@ -1,0 +1,22 @@
+title: Network Discovery - arp, route, ipconfig, netstat
+id: 20260702161449Dis
+status: experimental
+description: Detects execution of arp, route, ipconfig, netstat, net view, nltest.
+references:
+  - https://www.fbi.gov/file-repository/cyber-alerts/stopransomware-medusa-ransomware-031225.pdf/view
+author: Detection Engineering Team
+date: 2026-07-02
+logsource:
+  category: process
+  product: windows
+detection:
+    selection:
+      Image|endswith: ["\arp.exe", "\route.exe", "\ipconfig.exe", "\netstat.exe", "\nltest.exe"]
+    condition: selection
+falsepositives:
+  - Troubleshooting.
+level: medium
+tags:
+  - attack.T1046
+  - ransomware.krybit
+  - ransomware.0apt

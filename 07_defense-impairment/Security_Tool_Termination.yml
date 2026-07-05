@@ -1,0 +1,33 @@
+title: Security Tool Process Termination
+id: 4e5f6a7b-8c9d-0e1f-2a3b-4c5d6e7f8a9b
+status: experimental
+description: |
+  Detects termination of security-related processes (e.g., WRSA.exe, MsMpEng.exe) using taskkill.
+  Medusa and many ransomware families attempt to disable AV/EDR.
+references:
+  - https://www.fbi.gov/file-repository/cyber-alerts/stopransomware-medusa-ransomware-031225.pdf/view
+author: Detection Engineering Team
+date: 2026-06-29
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  selection:
+    EventID: 1
+    Image|endswith: '\taskkill.exe'
+    CommandLine|contains|any:
+      - 'WRSA.exe'
+      - 'MsMpEng.exe'
+      - 'Sentinel'
+      - 'CrowdStrike'
+      - 'Sophos'
+      - 'Trend'
+      - 'CarbonBlack'
+      - 'Elastic'
+  condition: selection
+falsepositives:
+  - Administrative termination of security software.
+level: high
+tags:
+  - attack.t1562
+  - ransomware.medusa

@@ -1,0 +1,23 @@
+title: SAM Registry Export
+id: 20260702161449Cre
+status: experimental
+description: Detects reg.exe save of SAM/SECURITY hives.
+references:
+  - https://www.fbi.gov/file-repository/cyber-alerts/stopransomware-medusa-ransomware-031225.pdf/view
+author: Detection Engineering Team
+date: 2026-07-02
+logsource:
+  category: process
+  product: windows
+detection:
+    selection:
+      Image|endswith: "\reg.exe"
+      CommandLine|contains|any: ["save hklm\sam", "save hklm\security"]
+    condition: selection
+falsepositives:
+  - Legitimate backup.
+level: high
+tags:
+  - attack.T1003.002
+  - ransomware.krybit
+  - ransomware.0apt

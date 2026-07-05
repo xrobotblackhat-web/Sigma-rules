@@ -1,0 +1,23 @@
+title: WinRM Remote Command
+id: 20260702161449Lat
+status: experimental
+description: Detects winrs.exe or Invoke-Command via PowerShell.
+references:
+  - https://www.fbi.gov/file-repository/cyber-alerts/stopransomware-medusa-ransomware-031225.pdf/view
+author: Detection Engineering Team
+date: 2026-07-02
+logsource:
+  category: process
+  product: windows
+detection:
+    selection:
+      Image|endswith: ["\winrs.exe", "\powershell.exe"]
+      CommandLine|contains|any: ["winrs", "-r:", "Invoke-Command"]
+    condition: selection
+falsepositives:
+  - Legitimate.
+level: high
+tags:
+  - attack.T1021.006
+  - ransomware.krybit
+  - ransomware.0apt

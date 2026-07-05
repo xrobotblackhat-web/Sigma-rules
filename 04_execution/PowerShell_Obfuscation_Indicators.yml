@@ -1,0 +1,33 @@
+title: PowerShell Obfuscation Indicators
+id: g7a8b9c0-d1e2-3f4a-5b6c-7d8e9f0a1b2c
+status: experimental
+description: |
+  Detects common PowerShell obfuscation patterns: EncodedCommand, IEX, FromBase64String, Gzip compression, etc.
+  These are used to hide malicious commands.
+references:
+  - https://attack.mitre.org/techniques/T1027/
+author: Detection Engineering Team
+date: 2026-06-29
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  selection:
+    EventID: 1
+    Image|endswith: '\powershell.exe'
+    CommandLine|contains|any:
+      - '-EncodedCommand'
+      - '-e '
+      - 'IEX'
+      - 'FromBase64String'
+      - 'GzipStream'
+      - 'Reflection'
+      - 'DownloadString'
+      - 'Invoke-Expression'
+  condition: selection
+falsepositives:
+  - Legitimate administration with encoded commands (e.g., for complex scripts).
+level: medium
+tags:
+  - attack.t1027
+  - ransomware.medusa

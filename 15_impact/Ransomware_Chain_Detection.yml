@@ -1,0 +1,36 @@
+title: Ransomware Kill Chain - Staging, Discovery, Impact
+id: h8b9c0d1-e2f3-4a5b-6c7d-8e9f0a1b2c3d
+status: experimental
+description: |
+  Correlates three stages within 30 minutes: payload download → discovery burst → shadow copy deletion.
+  This is a strong indicator of ransomware activity.
+references:
+  - https://www.fbi.gov/file-repository/cyber-alerts/stopransomware-medusa-ransomware-031225.pdf/view
+author: Detection Engineering Team
+date: 2026-06-29
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  stage1_download:
+    EventID: 1
+    Image|endswith: ['\certutil.exe', '\bitsadmin.exe', '\curl.exe', '\powershell.exe']
+    CommandLine|contains|any: ['-urlcache', '/transfer', 'DownloadFile', 'Invoke-WebRequest']
+    timeframe: 30m
+  stage2_discovery:
+    EventID: 1
+    Image|endswith: ['\systeminfo.exe', '\whoami.exe', '\net.exe', '\ipconfig.exe']
+    ParentImage: from stage1_download.Image
+    timeframe: 30m
+  stage3_impact:
+    EventID: 1
+    CommandLine|contains|any: ['vssadmin delete shadows', 'wmic shadowcopy delete']
+    ParentImage: from stage2_discovery.Image
+    timeframe: 30m
+  condition: stage1_download and stage2_discovery and stage3_impact
+falsepositives:
+  - Extremely unlikely in normal operations.
+level: critical
+tags:
+  - attack.t1490
+  - ransomware.medusa

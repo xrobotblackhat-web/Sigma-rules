@@ -1,0 +1,31 @@
+title: FortiBleed - Successful Login Following Brute-Force
+id: c3d4e5f6-a7b8-9012-cdef-345678901234
+status: experimental
+description: Detects a successful SSL-VPN or admin login from a source IP that previously exhibited high-volume failed authentication attempts, indicating a potential FortiBleed compromise.
+author: Detection Engineering Team
+date: 2026-06-27
+references:
+  - https://www.csa.gov.sg/alerts-and-advisories/advisories/ad-2026-007/
+  - https://support.huntress.io/hc/en-us/articles/52698652545171-2026-June-Fortibleed-Credential-Exposure
+tags:
+  - attack.credential_access
+  - attack.t1078
+  - attack.t1078.001
+  - campaign.fortibleed
+logsource:
+  category: vpn
+  product: fortigate
+detection:
+  selection_failures:
+    event_type: "vpn"
+    action: "failed"
+    timeframe: 10m
+    condition: count by source_ip > 20
+  selection_success:
+    event_type: "vpn"
+    action: "success"
+    source_ip: from selection_failures.source_ip
+  condition: selection_failures and selection_success
+falsepositives:
+  - Legitimate user eventually succeeding after multiple attempts
+level: critical

@@ -1,0 +1,32 @@
+title: Mass Backup File Deletion
+id: e5f6a7b8-c9d0-1e2f-3a4b-5c6d7e8f9a0b
+status: experimental
+description: |
+  Detects mass deletion of backup file extensions (.vhd, .bak, .wbk, .bkf) using del/erase.
+  Ransomware often deletes backups before encryption.
+references:
+  - https://attack.mitre.org/techniques/T1485/
+author: Detection Engineering Team
+date: 2026-06-29
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  selection:
+    EventID: 1
+    Image|endswith: '\cmd.exe'
+    CommandLine|contains|any:
+      - 'del '
+      - 'erase '
+    CommandLine|contains|any:
+      - '*.vhd'
+      - '*.bak'
+      - '*.wbk'
+      - '*.bkf'
+  condition: selection
+falsepositives:
+  - Legitimate cleanup scripts.
+level: high
+tags:
+  - attack.t1485
+  - ransomware.medusa

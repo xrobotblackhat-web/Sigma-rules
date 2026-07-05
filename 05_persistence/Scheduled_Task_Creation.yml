@@ -1,0 +1,23 @@
+title: Scheduled Task Creation
+id: 20260702161449Per
+status: experimental
+description: Detects schtasks /create or New-ScheduledTask.
+references:
+  - https://www.fbi.gov/file-repository/cyber-alerts/stopransomware-medusa-ransomware-031225.pdf/view
+author: Detection Engineering Team
+date: 2026-07-02
+logsource:
+  category: process
+  product: windows
+detection:
+    selection:
+      Image|endswith: ["\schtasks.exe", "\powershell.exe"]
+      CommandLine|contains|any: ["/create", "New-ScheduledTask"]
+    condition: selection
+falsepositives:
+  - Admin tasks.
+level: medium
+tags:
+  - attack.T1053.005
+  - ransomware.krybit
+  - ransomware.0apt

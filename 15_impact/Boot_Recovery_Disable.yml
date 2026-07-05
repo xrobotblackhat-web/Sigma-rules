@@ -1,0 +1,22 @@
+title: Recovery Options Disabled
+id: 20260702161449Imp
+status: experimental
+description: Detects bcdedit /set {default} recoveryenabled No.
+references:
+  - https://www.fbi.gov/file-repository/cyber-alerts/stopransomware-medusa-ransomware-031225.pdf/view
+author: Detection Engineering Team
+date: 2026-07-02
+logsource:
+  category: process
+  product: windows
+detection:
+    selection:
+      CommandLine|contains: "bcdedit /set {default} recoveryenabled No"
+    condition: selection
+falsepositives:
+  - Rare.
+level: critical
+tags:
+  - attack.T1490
+  - ransomware.krybit
+  - ransomware.0apt

@@ -1,0 +1,23 @@
+title: VPN Brute Force - Multiple Failed Logins
+id: 20260702161449Ini
+status: experimental
+description: Detects multiple failed VPN logins from the same source IP, indicating brute force or password spraying.
+references:
+  - https://www.fbi.gov/file-repository/cyber-alerts/stopransomware-medusa-ransomware-031225.pdf/view
+author: Detection Engineering Team
+date: 2026-07-02
+logsource:
+  category: vpn
+  product: fortigate
+detection:
+    selection:
+      event_type: "vpn"
+      action: "failed"
+    condition: selection | count by source_ip > 10 within 5m
+falsepositives:
+  - Users with forgotten passwords or misconfigured clients.
+level: high
+tags:
+  - attack.T1110
+  - ransomware.krybit
+  - ransomware.0apt

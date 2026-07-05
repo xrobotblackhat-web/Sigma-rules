@@ -1,0 +1,23 @@
+title: Large Outbound HTTP/HTTPS Uploads
+id: 20260702161449Exf
+status: experimental
+description: Detects high-volume outbound connections (exfiltration).
+references:
+  - https://www.fbi.gov/file-repository/cyber-alerts/stopransomware-medusa-ransomware-031225.pdf/view
+author: Detection Engineering Team
+date: 2026-07-02
+logsource:
+  category: network
+  product: windows
+detection:
+    selection:
+      DestinationPort: 443
+      BytesOut: "> 1000000"
+    condition: selection
+falsepositives:
+  - Legitimate large uploads.
+level: medium
+tags:
+  - attack.T1048
+  - ransomware.krybit
+  - ransomware.0apt

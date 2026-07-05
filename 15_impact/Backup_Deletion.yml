@@ -1,0 +1,23 @@
+title: Backup File Deletion
+id: 20260702161449Imp
+status: experimental
+description: Detects mass deletion of .vhd, .bak, .wbk files.
+references:
+  - https://www.fbi.gov/file-repository/cyber-alerts/stopransomware-medusa-ransomware-031225.pdf/view
+author: Detection Engineering Team
+date: 2026-07-02
+logsource:
+  category: process
+  product: windows
+detection:
+    selection:
+      Image|endswith: "\cmd.exe"
+      CommandLine|contains|any: ["del *.vhd", "del *.bak", "del *.wbk", "erase"]
+    condition: selection
+falsepositives:
+  - Cleanup scripts.
+level: high
+tags:
+  - attack.T1485
+  - ransomware.krybit
+  - ransomware.0apt

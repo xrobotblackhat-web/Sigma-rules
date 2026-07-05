@@ -1,0 +1,23 @@
+title: Defender Tamper Protection Disabled
+id: 20260702161449Def
+status: experimental
+description: Detects PowerShell command to disable Tamper Protection.
+references:
+  - https://www.fbi.gov/file-repository/cyber-alerts/stopransomware-medusa-ransomware-031225.pdf/view
+author: Detection Engineering Team
+date: 2026-07-02
+logsource:
+  category: process
+  product: windows
+detection:
+    selection:
+      Image|endswith: "\powershell.exe"
+      CommandLine|contains: "Set-MpPreference -DisableTamperProtection $true"
+    condition: selection
+falsepositives:
+  - Very rare.
+level: critical
+tags:
+  - attack.T1562.001
+  - ransomware.krybit
+  - ransomware.0apt

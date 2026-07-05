@@ -1,0 +1,29 @@
+title: Account Creation or Modification
+id: d4e5f6a7-b8c9-0d1e-f2a3-b4c5d6e7f8a9
+status: experimental
+description: |
+  Detects creation or modification of user accounts using net user, wmic, or PowerShell AD cmdlets.
+  Ransomware operators often create new accounts or elevate privileges.
+references:
+  - https://attack.mitre.org/techniques/T1136/
+author: Detection Engineering Team
+date: 2026-06-29
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  selection:
+    EventID: 1
+    CommandLine|contains|any:
+      - 'net user /add'
+      - 'net group /add'
+      - 'New-LocalUser'
+      - 'New-ADUser'
+      - 'Add-ADGroupMember'
+  condition: selection
+falsepositives:
+  - Legitimate account management.
+level: high
+tags:
+  - attack.t1136
+  - ransomware.medusa

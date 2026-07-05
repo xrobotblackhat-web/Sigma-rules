@@ -1,0 +1,22 @@
+title: Volume Shadow Copy Deletion
+id: 20260702161449Imp
+status: experimental
+description: Detects vssadmin, wmic, diskshadow, PowerShell deletion.
+references:
+  - https://www.fbi.gov/file-repository/cyber-alerts/stopransomware-medusa-ransomware-031225.pdf/view
+author: Detection Engineering Team
+date: 2026-07-02
+logsource:
+  category: process
+  product: windows
+detection:
+    selection:
+      CommandLine|contains|any: ["vssadmin delete shadows", "wmic shadowcopy delete", "diskshadow /s", "Get-WmiObject Win32_ShadowCopy | Remove-WmiObject"]
+    condition: selection
+falsepositives:
+  - Legitimate backup maintenance.
+level: critical
+tags:
+  - attack.T1490
+  - ransomware.krybit
+  - ransomware.0apt

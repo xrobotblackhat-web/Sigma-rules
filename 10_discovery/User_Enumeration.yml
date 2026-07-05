@@ -1,0 +1,22 @@
+title: Local User Enumeration
+id: 20260702161449Dis
+status: experimental
+description: Detects net user, net localgroup, wmic useraccount, quser.
+references:
+  - https://www.fbi.gov/file-repository/cyber-alerts/stopransomware-medusa-ransomware-031225.pdf/view
+author: Detection Engineering Team
+date: 2026-07-02
+logsource:
+  category: process
+  product: windows
+detection:
+    selection:
+      Image|endswith: ["\net.exe", "\wmic.exe", "\quser.exe"]
+    condition: selection
+falsepositives:
+  - Admin tasks.
+level: medium
+tags:
+  - attack.T1087
+  - ransomware.krybit
+  - ransomware.0apt

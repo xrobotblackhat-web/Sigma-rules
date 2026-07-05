@@ -1,0 +1,23 @@
+title: UAC Bypass Indicator
+id: 20260702161449Per
+status: experimental
+description: Detects known UAC bypass patterns (fodhelper, sdclt, eventvwr).
+references:
+  - https://www.fbi.gov/file-repository/cyber-alerts/stopransomware-medusa-ransomware-031225.pdf/view
+author: Detection Engineering Team
+date: 2026-07-02
+logsource:
+  category: process
+  product: windows
+detection:
+    selection:
+      Image|endswith: ["\fodhelper.exe", "\sdclt.exe", "\eventvwr.exe"]
+      CommandLine|contains: ["/c"]
+    condition: selection
+falsepositives:
+  - Rare legitimate use.
+level: high
+tags:
+  - attack.T1548
+  - ransomware.krybit
+  - ransomware.0apt

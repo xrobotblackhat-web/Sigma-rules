@@ -1,0 +1,50 @@
+title: Ransomware Payload Staging - Download Then Execute
+id: 4a7e8c9d-1234-5678-90ab-cdef12345678
+status: experimental
+description: |
+  Detects a signed Windows utility (certutil, bitsadmin, curl, PowerShell) downloading a remote file,
+  followed within 5 minutes by execution of a new executable or DLL from a user-writable location.
+  This behavior is common in ransomware staging (Medusa, LockBit, Conti).
+references:
+  - https://www.fbi.gov/file-repository/cyber-alerts/stopransomware-medusa-ransomware-031225.pdf/view
+author: Detection Engineering Team
+date: 2026-06-29
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  stage1_download:
+    EventID: 1
+    Image|endswith:
+      - '\certutil.exe'
+      - '\bitsadmin.exe'
+      - '\curl.exe'
+      - '\powershell.exe'
+    CommandLine|contains|any:
+      - '-urlcache'
+      - '/transfer'
+      - 'DownloadFile'
+      - 'Invoke-WebRequest'
+    timeframe: 5m
+  stage2_execution:
+    EventID: 1
+    Image|endswith:
+      - '\cmd.exe'
+      - '\powershell.exe'
+      - '\rundll32.exe'
+      - '\regsvr32.exe'
+    ParentImage: from stage1_download.Image
+    Image|startswith:
+      - 'C:\Users\'
+      - 'C:\ProgramData\'
+      - 'C:\Windows\Temp\'
+    timeframe: 5m
+  condition: stage1_download and stage2_execution
+falsepositives:
+  - Legitimate administrative downloads followed by software installation.
+  - Some security tools may exhibit similar patterns.
+level: high
+tags:
+  - attack.t1190
+  - attack.t1105
+  - ransomware.medusa

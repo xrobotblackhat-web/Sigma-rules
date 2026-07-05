@@ -1,0 +1,25 @@
+title: Remote Desktop Enablement via Registry
+id: 1b2c3d4e-5f6a-7b8c-9d0e-1f2a3b4c5d6e
+status: experimental
+description: |
+  Detects enabling of Remote Desktop (Terminal Server) by modifying the fDenyTSConnections registry value.
+  Attackers often enable RDP for lateral movement.
+references:
+  - https://attack.mitre.org/techniques/T1021.001/
+author: Detection Engineering Team
+date: 2026-06-29
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  selection:
+    EventID: 13  # Registry event (Sysmon)
+    TargetObject|endswith: '\Control\Terminal Server\fDenyTSConnections'
+    Details|contains: '0x00000000'
+  condition: selection
+falsepositives:
+  - Administrative enabling of RDP.
+level: high
+tags:
+  - attack.t1021.001
+  - ransomware.medusa

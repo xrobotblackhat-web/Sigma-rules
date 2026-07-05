@@ -1,0 +1,29 @@
+title: Remote MSI Installation from Network Share
+id: 5a6b7c8d-9e0f-1a2b-3c4d-5e6f7a8b9c0d
+status: experimental
+description: |
+  Detects installation of an MSI package from a remote network path (\\server\share\...).
+  Often used to deploy ransomware or tools.
+references:
+  - https://attack.mitre.org/techniques/T1218/
+author: Detection Engineering Team
+date: 2026-06-29
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  selection:
+    EventID: 1
+    Image|endswith: '\msiexec.exe'
+    CommandLine|contains|any:
+      - '\\'
+      - '//'
+    CommandLine|contains:
+      - '.msi'
+  condition: selection
+falsepositives:
+  - Legitimate remote software deployment.
+level: medium
+tags:
+  - attack.t1218
+  - ransomware.medusa

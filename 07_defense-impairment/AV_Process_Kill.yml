@@ -1,0 +1,23 @@
+title: Security Process Termination
+id: 20260702161449Def
+status: experimental
+description: Detects taskkill targeting known AV/EDR processes.
+references:
+  - https://www.fbi.gov/file-repository/cyber-alerts/stopransomware-medusa-ransomware-031225.pdf/view
+author: Detection Engineering Team
+date: 2026-07-02
+logsource:
+  category: process
+  product: windows
+detection:
+    selection:
+      Image|endswith: "\taskkill.exe"
+      CommandLine|contains|any: ["WRSA.exe", "MsMpEng.exe", "Sentinel", "CrowdStrike", "Sophos", "Trend", "CarbonBlack"]
+    condition: selection
+falsepositives:
+  - Admin termination.
+level: high
+tags:
+  - attack.T1562
+  - ransomware.krybit
+  - ransomware.0apt

@@ -1,0 +1,22 @@
+title: Event Log Clearing
+id: 20260702161449Def
+status: experimental
+description: Detects wevtutil cl, Clear-EventLog, or Remove-EventLog.
+references:
+  - https://www.fbi.gov/file-repository/cyber-alerts/stopransomware-medusa-ransomware-031225.pdf/view
+author: Detection Engineering Team
+date: 2026-07-02
+logsource:
+  category: process
+  product: windows
+detection:
+    selection:
+      CommandLine|contains|any: ["wevtutil cl", "Clear-EventLog", "Remove-EventLog"]
+    condition: selection
+falsepositives:
+  - Legitimate log rotation.
+level: high
+tags:
+  - attack.T1070
+  - ransomware.krybit
+  - ransomware.0apt

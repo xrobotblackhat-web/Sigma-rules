@@ -1,0 +1,26 @@
+title: Firewall Disablement via netsh or PowerShell
+id: 3d4e5f6a-7b8c-9d0e-1f2a-3b4c5d6e7f8a
+status: experimental
+description: |
+  Detects attempts to disable Windows Firewall using netsh or PowerShell.
+  This is a common defense evasion step in ransomware.
+references:
+  - https://attack.mitre.org/techniques/T1562/
+author: Detection Engineering Team
+date: 2026-06-29
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  selection:
+    EventID: 1
+    CommandLine|contains|any:
+      - 'netsh advfirewall set allprofiles state off'
+      - 'Set-NetFirewallProfile -All -Enabled False'
+  condition: selection
+falsepositives:
+  - Legitimate firewall maintenance.
+level: high
+tags:
+  - attack.t1562
+  - ransomware.medusa

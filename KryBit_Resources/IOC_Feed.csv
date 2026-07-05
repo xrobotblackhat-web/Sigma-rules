@@ -1,0 +1,5 @@
+Type,Value,Description
+Domain,example.com,C2 domain
+IP,1.2.3.4,C2 IP
+Hash,d41d8cd98f00b204e9800998ecf8427e,Sample hash
+Wallet,1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa,Bitcoin wallet

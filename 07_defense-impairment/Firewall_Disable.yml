@@ -1,0 +1,22 @@
+title: Firewall Disablement
+id: 20260702161449Def
+status: experimental
+description: Detects netsh advfirewall set allprofiles state off.
+references:
+  - https://www.fbi.gov/file-repository/cyber-alerts/stopransomware-medusa-ransomware-031225.pdf/view
+author: Detection Engineering Team
+date: 2026-07-02
+logsource:
+  category: process
+  product: windows
+detection:
+    selection:
+      CommandLine|contains: "netsh advfirewall set allprofiles state off"
+    condition: selection
+falsepositives:
+  - Legitimate maintenance.
+level: high
+tags:
+  - attack.T1562
+  - ransomware.krybit
+  - ransomware.0apt

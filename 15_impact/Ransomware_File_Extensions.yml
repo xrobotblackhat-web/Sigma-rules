@@ -1,0 +1,22 @@
+title: KryBit File Extension Creation
+id: 20260702161449Imp
+status: experimental
+description: Detects creation of files with .KRYBIT extension.
+references:
+  - https://www.fbi.gov/file-repository/cyber-alerts/stopransomware-medusa-ransomware-031225.pdf/view
+author: Detection Engineering Team
+date: 2026-07-02
+logsource:
+  category: file
+  product: windows
+detection:
+    selection:
+      TargetFilename|endswith: ".KRYBIT"
+    condition: selection
+falsepositives:
+  - None likely.
+level: critical
+tags:
+  - attack.T1486
+  - ransomware.krybit
+  - ransomware.0apt

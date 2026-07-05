@@ -1,0 +1,22 @@
+title: Archive Creation (RAR, 7-Zip, tar, makecab)
+id: 20260702161449Col
+status: experimental
+description: Detects execution of archiving utilities.
+references:
+  - https://www.fbi.gov/file-repository/cyber-alerts/stopransomware-medusa-ransomware-031225.pdf/view
+author: Detection Engineering Team
+date: 2026-07-02
+logsource:
+  category: process
+  product: windows
+detection:
+    selection:
+      Image|endswith|any: ["\rar.exe", "\7z.exe", "\tar.exe", "\makecab.exe"]
+    condition: selection
+falsepositives:
+  - Legitimate backup/archiving.
+level: medium
+tags:
+  - attack.T1560
+  - ransomware.krybit
+  - ransomware.0apt

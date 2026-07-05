@@ -1,0 +1,39 @@
+title: FortiBleed - Suspicious Admin Account Creation
+id: b8c9d0e1-f2a3-4567-hijk-890123456789
+status: experimental
+description: Detects creation of new administrator accounts with names commonly used by FortiBleed attackers. CVE-2026-24858 was also exploited to create rogue local admin accounts.
+author: Detection Engineering Team
+date: 2026-06-27
+references:
+  - https://www.csa.gov.sg/alerts-and-advisories/advisories/ad-2026-007/
+  - https://labs.cloudsecurityalliance.org/research/csa-research-note-fortibleed-default-credentials-20260620-cs/
+tags:
+  - attack.persistence
+  - attack.t1098
+  - attack.t1136
+  - campaign.fortibleed
+logsource:
+  category: firewall
+  product: fortigate
+detection:
+  selection:
+    message|contains:
+      - "administrator created"
+      - "admin created"
+      - "new admin"
+      - "user added"
+  filter_suspicious_names:
+    account_name|in:
+      - "forticloud"
+      - "fortiuser"
+      - "fortinet-support"
+      - "fortinet-tech-support"
+      - "backup"
+      - "monitoring"
+      - "svc_*"
+      - "test"
+      - "temp"
+  condition: selection and filter_suspicious_names
+falsepositives:
+  - Legitimate admin account creation by authorized personnel
+level: critical

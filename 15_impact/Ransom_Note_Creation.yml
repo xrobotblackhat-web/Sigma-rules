@@ -1,0 +1,22 @@
+title: KryBit Ransom Note Creation
+id: 20260702161449Imp
+status: experimental
+description: Detects creation of known ransom note names (README-RECOVER.txt, RECOVER-README.txt).
+references:
+  - https://www.fbi.gov/file-repository/cyber-alerts/stopransomware-medusa-ransomware-031225.pdf/view
+author: Detection Engineering Team
+date: 2026-07-02
+logsource:
+  category: file
+  product: windows
+detection:
+    selection:
+      TargetFilename|endswith|any: ["README-RECOVER.txt", "RECOVER-README.txt"]
+    condition: selection
+falsepositives:
+  - None.
+level: critical
+tags:
+  - attack.T1486
+  - ransomware.krybit
+  - ransomware.0apt

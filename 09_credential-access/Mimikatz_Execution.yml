@@ -1,0 +1,22 @@
+title: Mimikatz Commandline Patterns
+id: 20260702161449Cre
+status: experimental
+description: Detects known Mimikatz command-line arguments.
+references:
+  - https://www.fbi.gov/file-repository/cyber-alerts/stopransomware-medusa-ransomware-031225.pdf/view
+author: Detection Engineering Team
+date: 2026-07-02
+logsource:
+  category: process
+  product: windows
+detection:
+    selection:
+      CommandLine|contains|any: ["sekurlsa::logonpasswords", "privilege::debug", "sekurlsa::minidump"]
+    condition: selection
+falsepositives:
+  - Rarely false, but may occur in red-team exercises.
+level: critical
+tags:
+  - attack.T1003
+  - ransomware.krybit
+  - ransomware.0apt

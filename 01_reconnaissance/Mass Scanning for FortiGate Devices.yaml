@@ -1,0 +1,41 @@
+title: FortiBleed Reconnaissance - Mass FortiGate Scanning
+id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+status: experimental
+description: Detects mass scanning activity targeting FortiGate SSL-VPN and admin interfaces, consistent with FortiBleed reconnaissance phase.
+author: Detection Engineering Team
+date: 2026-06-27
+references:
+  - https://socradar.io/blog/fortibleed-fortinet-firewalls-compromised/
+  - https://www.csa.gov.sg/alerts-and-advisories/advisories/ad-2026-007/
+tags:
+  - attack.reconnaissance
+  - attack.t1595
+  - attack.t1046
+  - campaign.fortibleed
+logsource:
+  category: firewall
+  product: fortigate
+detection:
+  selection_ports:
+    dest_port:
+      - 443
+      - 10443
+      - 8443
+      - 4443
+  selection_uris:
+    uri:
+      - "/remote/login"
+      - "/remote/logincheck"
+      - "/remote/hostcheck_validate"
+      - "/api/v2/*"
+      - "/admin/*"
+  selection_external:
+    source_ip|not:
+      - "10.0.0.0/8"
+      - "172.16.0.0/12"
+      - "192.168.0.0/16"
+  condition: selection_ports and selection_uris and selection_external
+falsepositives:
+  - Legitimate VPN user authentication attempts
+  - Authorized penetration testing
+level: medium

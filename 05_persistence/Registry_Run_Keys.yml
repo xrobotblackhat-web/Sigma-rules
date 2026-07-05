@@ -1,0 +1,23 @@
+title: Registry Run Key Modification
+id: 20260702161449Per
+status: experimental
+description: Detects modifications to Run/RunOnce keys.
+references:
+  - https://www.fbi.gov/file-repository/cyber-alerts/stopransomware-medusa-ransomware-031225.pdf/view
+author: Detection Engineering Team
+date: 2026-07-02
+logsource:
+  category: registry
+  product: windows
+detection:
+    selection:
+      TargetObject|endswith|any: ["\Run", "\RunOnce"]
+      EventType: "SetValue"
+    condition: selection
+falsepositives:
+  - Legitimate software installation.
+level: medium
+tags:
+  - attack.T1547.001
+  - ransomware.krybit
+  - ransomware.0apt

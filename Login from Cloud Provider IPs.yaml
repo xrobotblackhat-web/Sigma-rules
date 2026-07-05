@@ -1,0 +1,35 @@
+title: FortiBleed - VPN Login from Cloud Provider IP
+id: e5f6a7b8-c9d0-1234-efgh-567890123456
+status: experimental
+description: Detects SSL-VPN or admin logins originating from cloud provider IP ranges. FortiBleed attackers used automated infrastructure, likely hosted on cloud platforms.
+author: Detection Engineering Team
+date: 2026-06-27
+references:
+  - https://www.csoonline.com/article/4186790/fortibleed-campaign-exposes-75000-fortinet-firewalls-worldwide.html
+  - https://www.csa.gov.sg/alerts-and-advisories/advisories/ad-2026-007/
+tags:
+  - attack.initial_access
+  - attack.t1078
+  - campaign.fortibleed
+logsource:
+  category: vpn
+  product: fortigate
+detection:
+  selection:
+    event_type: "vpn"
+    action: "success"
+  filter_cloud:
+    source_as_org|in:
+      - "Amazon"
+      - "Google"
+      - "Microsoft"
+      - "OVH"
+      - "DigitalOcean"
+      - "Oracle"
+      - "Tencent"
+      - "Alibaba"
+  condition: selection and filter_cloud
+falsepositives:
+  - Legitimate VPN users connecting through cloud-hosted VPN services
+  - Corporate resources hosted in the cloud
+level: high

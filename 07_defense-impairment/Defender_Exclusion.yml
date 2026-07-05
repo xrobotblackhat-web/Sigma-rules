@@ -1,0 +1,23 @@
+title: Windows Defender Exclusion Added
+id: 20260702161449Def
+status: experimental
+description: Detects addition of Defender exclusions via PowerShell or MpCmdRun.
+references:
+  - https://www.fbi.gov/file-repository/cyber-alerts/stopransomware-medusa-ransomware-031225.pdf/view
+author: Detection Engineering Team
+date: 2026-07-02
+logsource:
+  category: process
+  product: windows
+detection:
+    selection:
+      Image|endswith: ["\powershell.exe", "\MpCmdRun.exe"]
+      CommandLine|contains|any: ["-ExclusionPath", "Add-MpPreference -ExclusionPath"]
+    condition: selection
+falsepositives:
+  - Legitimate admin.
+level: high
+tags:
+  - attack.T1562.001
+  - ransomware.krybit
+  - ransomware.0apt

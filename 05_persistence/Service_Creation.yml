@@ -1,0 +1,23 @@
+title: Service Creation (Persistence/Privilege)
+id: 20260702161449Per
+status: experimental
+description: Detects creation of a new service via sc or PowerShell.
+references:
+  - https://www.fbi.gov/file-repository/cyber-alerts/stopransomware-medusa-ransomware-031225.pdf/view
+author: Detection Engineering Team
+date: 2026-07-02
+logsource:
+  category: process
+  product: windows
+detection:
+    selection:
+      Image|endswith: ["\sc.exe", "\powershell.exe"]
+      CommandLine|contains|any: ["sc create", "New-Service"]
+    condition: selection
+falsepositives:
+  - Legitimate software installation.
+level: high
+tags:
+  - attack.T1543
+  - ransomware.krybit
+  - ransomware.0apt

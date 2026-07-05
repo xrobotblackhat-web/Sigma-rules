@@ -1,0 +1,32 @@
+title: FortiBleed - Packet Sniffer Execution on FortiGate
+id: a7b8c9d0-e1f2-3456-ghij-789012345678
+status: experimental
+description: Detects execution of the FortiOS built-in packet sniffer (`diagnose sniffer packet`). FortiBleed attackers used this command to harvest NTLM and Kerberos hashes from internal network traffic.
+author: Detection Engineering Team
+date: 2026-06-27
+references:
+  - https://www.ampcuscyber.com/fortibleed-campaign-steals-110m-fortinet-credentials/
+  - https://support.huntress.io/hc/en-us/articles/52698652545171-2026-June-Fortibleed-Credential-Exposure
+tags:
+  - attack.discovery
+  - attack.t1040
+  - attack.t1078
+  - campaign.fortibleed
+logsource:
+  category: firewall
+  product: fortigate
+detection:
+  selection:
+    message|contains:
+      - "diagnose sniffer packet"
+      - "sniffer"
+      - "packet capture"
+  selection_interfaces:
+    message|contains:
+      - "any"
+      - "all interfaces"
+  condition: selection and selection_interfaces
+falsepositives:
+  - Authorized network troubleshooting
+  - Legitimate packet capture for diagnostics
+level: critical

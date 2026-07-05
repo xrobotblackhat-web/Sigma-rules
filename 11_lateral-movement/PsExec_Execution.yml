@@ -1,0 +1,23 @@
+title: PsExec Execution
+id: 20260702161449Lat
+status: experimental
+description: Detects PsExec.exe with -accepteula.
+references:
+  - https://www.fbi.gov/file-repository/cyber-alerts/stopransomware-medusa-ransomware-031225.pdf/view
+author: Detection Engineering Team
+date: 2026-07-02
+logsource:
+  category: process
+  product: windows
+detection:
+    selection:
+      Image|endswith: "\PsExec.exe"
+      CommandLine|contains: "-accepteula"
+    condition: selection
+falsepositives:
+  - Legitimate admin use.
+level: high
+tags:
+  - attack.T1570
+  - ransomware.krybit
+  - ransomware.0apt

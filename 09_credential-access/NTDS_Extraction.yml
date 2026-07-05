@@ -1,0 +1,22 @@
+title: NTDS.dit Extraction
+id: 20260702161449Cre
+status: experimental
+description: Detects attempts to copy or access NTDS.dit via ntdsutil or vssadmin.
+references:
+  - https://www.fbi.gov/file-repository/cyber-alerts/stopransomware-medusa-ransomware-031225.pdf/view
+author: Detection Engineering Team
+date: 2026-07-02
+logsource:
+  category: process
+  product: windows
+detection:
+    selection:
+      CommandLine|contains|any: ["ntdsutil", "create full", "vssadmin", "\Windows\NTDS\"]
+    condition: selection
+falsepositives:
+  - Very rare in legitimate use.
+level: critical
+tags:
+  - attack.T1003.003
+  - ransomware.krybit
+  - ransomware.0apt

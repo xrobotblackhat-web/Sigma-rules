@@ -1,0 +1,32 @@
+title: Active Directory Enumeration
+id: 9c2d3e4f-5a6b-7c8d-9e0f-1a2b3c4d5e6f
+status: experimental
+description: |
+  Detects execution of net group, net user, Get-ADComputer, dsquery, or nltest to enumerate domain users and groups.
+  This is commonly performed by ransomware operators before lateral movement.
+references:
+  - https://www.fbi.gov/file-repository/cyber-alerts/stopransomware-medusa-ransomware-031225.pdf/view
+author: Detection Engineering Team
+date: 2026-06-29
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  selection:
+    EventID: 1
+    CommandLine|contains|any:
+      - 'net group'
+      - 'net user'
+      - 'Get-ADComputer'
+      - 'Get-ADUser'
+      - 'dsquery'
+      - 'nltest /domain'
+      - 'ldapsearch'
+      - 'ADSI'
+  condition: selection
+falsepositives:
+  - Legitimate IT administration.
+level: medium
+tags:
+  - attack.t1069
+  - ransomware.medusa

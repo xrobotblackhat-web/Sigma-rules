@@ -1,0 +1,23 @@
+title: LSASS Dumping - ProcDump, MiniDump, comsvcs
+id: 20260702161449Cre
+status: experimental
+description: Detects access to LSASS via known dump tools or APIs.
+references:
+  - https://www.fbi.gov/file-repository/cyber-alerts/stopransomware-medusa-ransomware-031225.pdf/view
+author: Detection Engineering Team
+date: 2026-07-02
+logsource:
+  category: process
+  product: windows
+detection:
+    selection:
+      Image|endswith: ["\procdump.exe", "\rundll32.exe"]
+      CommandLine|contains|any: ["comsvcs.dll MiniDump", "lsass", "-ma"]
+    condition: selection
+falsepositives:
+  - Legitimate troubleshooting.
+level: critical
+tags:
+  - attack.T1003.001
+  - ransomware.krybit
+  - ransomware.0apt

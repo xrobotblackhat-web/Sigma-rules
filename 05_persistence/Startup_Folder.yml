@@ -1,0 +1,22 @@
+title: Startup Folder File Write
+id: 20260702161449Per
+status: experimental
+description: Detects file creation in Startup folders.
+references:
+  - https://www.fbi.gov/file-repository/cyber-alerts/stopransomware-medusa-ransomware-031225.pdf/view
+author: Detection Engineering Team
+date: 2026-07-02
+logsource:
+  category: file
+  product: windows
+detection:
+    selection:
+      TargetFilename|contains|any: ["\Start Menu\Programs\Startup", "\Users\", "\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup"]
+    condition: selection
+falsepositives:
+  - Legitimate user adding shortcuts.
+level: medium
+tags:
+  - attack.T1547.001
+  - ransomware.krybit
+  - ransomware.0apt

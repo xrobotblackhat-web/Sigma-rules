@@ -1,0 +1,23 @@
+title: WMI Remote Process Creation
+id: 20260702161449Lat
+status: experimental
+description: Detects wmic or PowerShell Invoke-WmiMethod with remote node.
+references:
+  - https://www.fbi.gov/file-repository/cyber-alerts/stopransomware-medusa-ransomware-031225.pdf/view
+author: Detection Engineering Team
+date: 2026-07-02
+logsource:
+  category: process
+  product: windows
+detection:
+    selection:
+      Image|endswith: ["\wmic.exe", "\powershell.exe"]
+      CommandLine|contains|any: ["/node:", "-ComputerName", "Invoke-WmiMethod"]
+    condition: selection
+falsepositives:
+  - Remote management.
+level: high
+tags:
+  - attack.T1047
+  - ransomware.krybit
+  - ransomware.0apt

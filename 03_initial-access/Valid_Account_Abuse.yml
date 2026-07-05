@@ -1,0 +1,24 @@
+title: Valid Account Abuse - Unusual Logon
+id: 20260702161449Ini
+status: experimental
+description: Detects logons from unusual locations or times for privileged accounts.
+references:
+  - https://www.fbi.gov/file-repository/cyber-alerts/stopransomware-medusa-ransomware-031225.pdf/view
+author: Detection Engineering Team
+date: 2026-07-02
+logsource:
+  category: windows
+  service: security
+detection:
+    selection:
+      EventID: 4624
+      LogonType: ["2", "10"]
+      TargetUserName|in: ["Administrator", "Domain Admins"]
+    condition: selection and not filter_known_ips
+falsepositives:
+  - Admins working remotely.
+level: medium
+tags:
+  - attack.T1078
+  - ransomware.krybit
+  - ransomware.0apt

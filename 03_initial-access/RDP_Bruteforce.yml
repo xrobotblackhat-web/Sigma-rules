@@ -1,0 +1,23 @@
+title: RDP Brute Force
+id: 20260702161449Ini
+status: experimental
+description: Detects multiple failed RDP logins (EventID 4625) from the same source.
+references:
+  - https://www.fbi.gov/file-repository/cyber-alerts/stopransomware-medusa-ransomware-031225.pdf/view
+author: Detection Engineering Team
+date: 2026-07-02
+logsource:
+  category: windows
+  service: security
+detection:
+    selection:
+      EventID: 4625
+      LogonType: 10
+    condition: selection | count by IpAddress > 10 within 5m
+falsepositives:
+  - Legitimate lockout situations.
+level: high
+tags:
+  - attack.T1110
+  - ransomware.krybit
+  - ransomware.0apt

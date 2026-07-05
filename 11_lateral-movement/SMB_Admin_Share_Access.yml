@@ -1,0 +1,23 @@
+title: SMB Admin Share Access
+id: 20260702161449Lat
+status: experimental
+description: Detects access to ADMIN$ or IPC$ shares from unusual sources.
+references:
+  - https://www.fbi.gov/file-repository/cyber-alerts/stopransomware-medusa-ransomware-031225.pdf/view
+author: Detection Engineering Team
+date: 2026-07-02
+logsource:
+  category: network
+  product: windows
+detection:
+    selection:
+      EventID: 5140
+      ShareName|contains: ["ADMIN$", "IPC$"]
+    condition: selection and not filter_trusted
+falsepositives:
+  - Administrative file shares.
+level: medium
+tags:
+  - attack.T1021.002
+  - ransomware.krybit
+  - ransomware.0apt

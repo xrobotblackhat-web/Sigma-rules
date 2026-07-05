@@ -1,0 +1,34 @@
+title: Remote Execution via WinRM or WMI
+id: b2c3d4e5-f6a7-89ab-cdef-012345678901
+status: experimental
+description: |
+  Detects remote command execution via WinRM (winrs) or WMI (wmic, Invoke-WmiMethod).
+  Used for lateral movement and remote payload execution.
+references:
+  - https://attack.mitre.org/techniques/T1021.006/
+  - https://attack.mitre.org/techniques/T1047/
+author: Detection Engineering Team
+date: 2026-06-29
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  selection:
+    EventID: 1
+    Image|endswith:
+      - '\winrs.exe'
+      - '\wmic.exe'
+      - '\powershell.exe'
+    CommandLine|contains|any:
+      - 'winrs'
+      - '/node:'
+      - '-ComputerName'
+      - 'Invoke-WmiMethod'
+  condition: selection
+falsepositives:
+  - Legitimate remote management.
+level: high
+tags:
+  - attack.t1021.006
+  - attack.t1047
+  - ransomware.medusa

@@ -1,0 +1,22 @@
+title: Active Directory Enumeration
+id: 20260702161449Dis
+status: experimental
+description: Detects net group, net user, Get-ADUser, dsquery, nltest /domain.
+references:
+  - https://www.fbi.gov/file-repository/cyber-alerts/stopransomware-medusa-ransomware-031225.pdf/view
+author: Detection Engineering Team
+date: 2026-07-02
+logsource:
+  category: process
+  product: windows
+detection:
+    selection:
+      CommandLine|contains|any: ["net group", "net user", "Get-ADUser", "dsquery", "nltest /domain"]
+    condition: selection
+falsepositives:
+  - Legitimate AD management.
+level: medium
+tags:
+  - attack.T1069
+  - ransomware.krybit
+  - ransomware.0apt

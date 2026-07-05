@@ -1,0 +1,27 @@
+title: Event Log Clearing
+id: f6a7b8c9-d0e1-2f3a-4b5c-6d7e8f9a0b1c
+status: experimental
+description: |
+  Detects clearing of Windows Event Logs using wevtutil or Clear-EventLog.
+  Attackers often clear logs to cover their tracks.
+references:
+  - https://attack.mitre.org/techniques/T1070/
+author: Detection Engineering Team
+date: 2026-06-29
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  selection:
+    EventID: 1
+    CommandLine|contains|any:
+      - 'wevtutil cl'
+      - 'Clear-EventLog'
+      - 'Remove-EventLog'
+  condition: selection
+falsepositives:
+  - Legitimate log maintenance.
+level: high
+tags:
+  - attack.t1070
+  - ransomware.medusa

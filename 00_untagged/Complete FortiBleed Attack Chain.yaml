@@ -1,0 +1,53 @@
+title: FortiBleed - Complete Attack Chain Detection
+id: d0e1f2a3-b4c5-6789-klmn-012345678901
+status: experimental
+description: Correlates multiple events to detect the complete FortiBleed attack chain: reconnaissance → brute-force → successful login → configuration export → persistence.
+author: Detection Engineering Team
+date: 2026-06-27
+references:
+  - https://socradar.io/blog/fortibleed-fortinet-firewalls-compromised/
+  - https://www.csa.gov.sg/alerts-and-advisories/advisories/ad-2026-007/
+  - https://www.ampcuscyber.com/fortibleed-campaign-steals-110m-fortinet-credentials/
+tags:
+  - attack.initial_access
+  - attack.persistence
+  - attack.collection
+  - campaign.fortibleed
+logsource:
+  category: firewall
+  product: fortigate
+detection:
+  # Stage 1: Reconnaissance - Multiple URI enumeration
+  stage1:
+    uri|in:
+      - "/remote/login"
+      - "/remote/logincheck"
+      - "/api/v2/*"
+      - "/admin/*"
+    timeframe: 5m
+    condition: count by source_ip > 10
+  # Stage 2: Credential Access - Failed logins
+  stage2:
+    event_type: "vpn"
+    action: "failed"
+    timeframe: 10m
+    condition: count by source_ip > 20
+  # Stage 3: Initial Access - Successful login
+  stage3:
+    event_type: "vpn"
+    action: "success"
+    source_ip: from stage2.source_ip
+  # Stage 4: Collection - Configuration export
+  stage4:
+    message|contains: ["config", "export", "backup"]
+    source_ip: from stage3.source_ip
+    timeframe: 30m
+  # Stage 5: Persistence - Admin account creation
+  stage5:
+    message|contains: ["administrator created", "admin created"]
+    source_ip: from stage4.source_ip
+    timeframe: 1h
+  condition: stage1 and stage2 and stage3 and stage4 and stage5
+falsepositives:
+  - Extremely unlikely; indicates confirmed compromise
+level: critical

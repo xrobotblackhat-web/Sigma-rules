@@ -1,0 +1,40 @@
+title: Ransomware Discovery Burst - Multiple Commands in Short Time
+id: 8b1c2d3e-4f5a-6b7c-8d9e-0f1a2b3c4d5e
+status: experimental
+description: |
+  Detects a process tree executing 5 or more distinct discovery utilities (systeminfo, whoami, net, ipconfig, etc.)
+  within 2 minutes. This pattern is characteristic of ransomware host/network reconnaissance.
+references:
+  - https://www.fbi.gov/file-repository/cyber-alerts/stopransomware-medusa-ransomware-031225.pdf/view
+author: Detection Engineering Team
+date: 2026-06-29
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  selection:
+    EventID: 1
+    Image|endswith:
+      - '\systeminfo.exe'
+      - '\whoami.exe'
+      - '\hostname.exe'
+      - '\ver.exe'
+      - '\ipconfig.exe'
+      - '\netstat.exe'
+      - '\net.exe'
+      - '\wmic.exe'
+      - '\arp.exe'
+      - '\route.exe'
+      - '\nslookup.exe'
+      - '\quser.exe'
+      - '\qwinsta.exe'
+      - '\nltest.exe'
+  condition: selection | count() by ParentImage > 5 within 2m
+falsepositives:
+  - Administrator troubleshooting may use multiple commands.
+  - Automated scripts that gather system info.
+level: medium
+tags:
+  - attack.t1082
+  - attack.t1046
+  - ransomware.medusa

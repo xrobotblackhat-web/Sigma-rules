@@ -1,0 +1,34 @@
+title: FortiBleed - Suspicious User-Agent Detection
+id: c9d0e1f2-a3b4-5678-ijkl-901234567890
+status: experimental
+description: Detects HTTP requests with user-agents commonly associated with automated scanning and exploitation tools used in FortiBleed.
+author: Detection Engineering Team
+date: 2026-06-27
+references:
+  - https://socradar.io/blog/fortibleed-fortinet-firewalls-compromised/
+  - https://www.csoonline.com/article/4186790/fortibleed-campaign-exposes-75000-fortinet-firewalls-worldwide.html
+tags:
+  - attack.defense_evasion
+  - attack.t1078
+  - campaign.fortibleed
+logsource:
+  category: webserver
+  product: fortigate
+detection:
+  selection:
+    user_agent|contains:
+      - "curl"
+      - "wget"
+      - "python"
+      - "python-requests"
+      - "Go-http-client"
+      - "masscan"
+      - "zgrab"
+      - "nmap"
+      - "libwww"
+      - "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)"
+  condition: selection
+falsepositives:
+  - Legitimate automation tools used by IT teams
+  - Security scanning tools
+level: medium

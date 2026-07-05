@@ -1,0 +1,39 @@
+Rule File,Tactic,Technique,Description
+VPN_Bruteforce.yml,Initial_Access,T1110,VPN Brute Force - Multiple Failed Logins
+RDP_Bruteforce.yml,Initial_Access,T1110,RDP Brute Force
+Webshell_Deployment.yml,Initial_Access,T1505.003,Web Shell Deployment
+Valid_Account_Abuse.yml,Initial_Access,T1078,Valid Account Abuse - Unusual Logon
+System_Info_Commands.yml,Discovery,T1082,System Information Discovery
+Network_Discovery.yml,Discovery,T1046,"Network Discovery - arp, route, ipconfig, netstat"
+AD_Enumeration.yml,Discovery,T1069,Active Directory Enumeration
+User_Enumeration.yml,Discovery,T1087,Local User Enumeration
+Process_Enumeration.yml,Discovery,T1057,Process Enumeration - tasklist
+LSASS_Dumping.yml,Credential_Access,T1003.001,"LSASS Dumping - ProcDump, MiniDump, comsvcs"
+Mimikatz_Execution.yml,Credential_Access,T1003,Mimikatz Commandline Patterns
+SAM_Export.yml,Credential_Access,T1003.002,SAM Registry Export
+NTDS_Extraction.yml,Credential_Access,T1003.003,NTDS.dit Extraction
+PsExec_Execution.yml,Lateral_Movement,T1570,PsExec Execution
+WMI_Remote_Execution.yml,Lateral_Movement,T1047,WMI Remote Process Creation
+WinRM_Remote_Command.yml,Lateral_Movement,T1021.006,WinRM Remote Command
+SMB_Admin_Share_Access.yml,Lateral_Movement,T1021.002,SMB Admin Share Access
+RDP_Logon_Unusual.yml,Lateral_Movement,T1021.001,Unusual RDP Logon
+Service_Creation.yml,Persistence,T1543,Service Creation (Persistence/Privilege)
+UAC_Bypass.yml,Persistence,T1548,UAC Bypass Indicator
+Registry_Run_Keys.yml,Persistence,T1547.001,Registry Run Key Modification
+Scheduled_Task_Creation.yml,Persistence,T1053.005,Scheduled Task Creation
+Startup_Folder.yml,Persistence,T1547.001,Startup Folder File Write
+Defender_Exclusion.yml,Defense_Evasion,T1562.001,Windows Defender Exclusion Added
+TamperProtection_Disable.yml,Defense_Evasion,T1562.001,Defender Tamper Protection Disabled
+EventLog_Clearing.yml,Defense_Evasion,T1070,Event Log Clearing
+AV_Process_Kill.yml,Defense_Evasion,T1562,Security Process Termination
+Firewall_Disable.yml,Defense_Evasion,T1562,Firewall Disablement
+AMSI_Bypass.yml,Defense_Evasion,T1562,AMSI Bypass Indicators
+Archive_Creation.yml,Collection,T1560,"Archive Creation (RAR, 7-Zip, tar, makecab)"
+Rclone_Usage.yml,Exfiltration,T1048,Rclone Execution
+Large_Upload_HTTPS.yml,Exfiltration,T1048,Large Outbound HTTP/HTTPS Uploads
+Shadow_Copy_Deletion.yml,Impact,T1490,Volume Shadow Copy Deletion
+Backup_Deletion.yml,Impact,T1485,Backup File Deletion
+Boot_Recovery_Disable.yml,Impact,T1490,Recovery Options Disabled
+Disk_Wiping.yml,Impact,T1485,Disk Wipe (cipher /w)
+Ransomware_File_Extensions.yml,Impact,T1486,KryBit File Extension Creation
+Ransom_Note_Creation.yml,Impact,T1486,KryBit Ransom Note Creation

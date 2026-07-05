@@ -1,0 +1,24 @@
+title: Unusual RDP Logon
+id: 20260702161449Lat
+status: experimental
+description: Detects RDP logons (EventID 4624, LogonType 10) from suspicious IPs.
+references:
+  - https://www.fbi.gov/file-repository/cyber-alerts/stopransomware-medusa-ransomware-031225.pdf/view
+author: Detection Engineering Team
+date: 2026-07-02
+logsource:
+  category: windows
+  service: security
+detection:
+    selection:
+      EventID: 4624
+      LogonType: 10
+      IpAddress|not_in: ["192.168.", "10."]
+    condition: selection
+falsepositives:
+  - Remote workers.
+level: medium
+tags:
+  - attack.T1021.001
+  - ransomware.krybit
+  - ransomware.0apt
